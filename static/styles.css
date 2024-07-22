@@ -1,3 +1,4 @@
 /* static/styles.css */
 footer {visibility: hidden;}
+header .stApp {display: none;}
 header .decoration {display: none;}
