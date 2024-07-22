@@ -6,6 +6,13 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+# Load custom CSS to hide Streamlit branding
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+local_css("static/styles.css")
+
 st.title("Premier League Fantasy Football Dashboard")
 st.write("Welcome to the Premier League Fantasy Football Dashboard!")
 
@@ -49,4 +56,3 @@ if st.button("Fetch Data"):
         st.dataframe(elements_df)
     else:
         st.write("Enter a valid League ID to see the standings.")
-
