@@ -3,6 +3,30 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+def process_new_api_data(data):
+    teams = {team['id']: team['name'] for team in data['teams']}
+    positions = {element_type['id']: element_type['singular_name'] for element_type in data['element_types']}
+    
+    players = [
+        {
+            'name': player['web_name'],
+            'team': teams[player['team']],
+            'position': positions[player['element_type']],
+            'total_points': player['total_points']
+        }
+        for player in data['elements']
+    ]
+    
+    top_10_players = sorted(players, key=lambda x: x['total_points'], reverse=True)[:10]
+    
+    return {
+        'players': players,
+        'top_10_players': top_10_players,
+        'team_distribution': {team: len([player for player in players if player['team'] == team]) for team in teams.values()},
+        'position_distribution': {position: len([player for player in players if player['position'] == position]) for position in positions.values()}
+    }
+
+
 def process_data(data):
     try:
         league_name = data['league']['name']

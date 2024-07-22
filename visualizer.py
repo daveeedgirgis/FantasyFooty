@@ -5,6 +5,46 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+def display_data_table(data, title):
+    st.write(title)
+    st.dataframe(pd.DataFrame(data))
+
+def bar_chart(data, x, y, title, xlabel, ylabel, rotation=0):
+    fig, ax = plt.subplots()
+    sns.barplot(data=data, x=x, y=y, ax=ax)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=rotation)
+    st.pyplot(fig)
+
+def pie_chart(data, labels, values, title):
+    fig, ax = plt.subplots()
+    ax.pie(data[values], labels=data[labels], autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax.set_title(title)
+    st.pyplot(fig)
+
+def visualize_new_api_data(processed_data):
+    df_players = pd.DataFrame(processed_data['players'])
+    df_top_10_players = pd.DataFrame(processed_data['top_10_players'])
+    df_team_distribution = pd.DataFrame(list(processed_data['team_distribution'].items()), columns=['Team', 'Number of Players'])
+    df_position_distribution = pd.DataFrame(list(processed_data['position_distribution'].items()), columns=['Position', 'Number of Players'])
+    
+    display_data_table(df_players, "Player Data from Premier League API")
+    
+    display_data_table(df_top_10_players, "Top 10 Players by Total Points")
+    
+    bar_chart(df_top_10_players, 'name', 'total_points', 'Top 10 Players by Total Points', 'Player', 'Total Points', rotation=90)
+    
+    bar_chart(df_team_distribution, 'Team', 'Number of Players', 'Team-wise Player Distribution', 'Team', 'Number of Players', rotation=90)
+    
+    pie_chart(df_position_distribution, 'Position', 'Number of Players', 'Distribution of Players by Position')
+
+
 def display_data(league_entries_df, standings_df):
     try:
         st.write("## Raw League Entries Data")

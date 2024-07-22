@@ -2,6 +2,14 @@ import requests
 import streamlit as st
 
 @st.cache_data
+def fetch_new_api_data(api_url="https://draft.premierleague.com/api/bootstrap-static"):
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        response.raise_for_status()
+
+@st.cache_data
 def fetch_data(league_id):
     url = f"https://draft.premierleague.com/api/league/{league_id}/details"
     response = requests.get(url)

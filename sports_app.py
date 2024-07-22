@@ -1,7 +1,7 @@
 import streamlit as st
-from data_fetcher import fetch_data, fetch_choices, fetch_transactions, fetch_bootstrap
-from data_processor import process_data, process_choices, process_transactions, process_bootstrap
-from visualizer import display_data, create_visualizations
+from data_fetcher import fetch_data, fetch_choices, fetch_transactions, fetch_bootstrap, fetch_new_api_data
+from data_processor import process_data, process_choices, process_transactions, process_bootstrap, process_new_api_data
+from visualizer import display_data, create_visualizations, visualize_new_api_data
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -11,6 +11,15 @@ st.write("Welcome to the Premier League Fantasy Football Dashboard!")
 
 # User input for league ID
 league_id = st.text_input("Enter your League ID:", value="148968")
+
+# Automatically fetch data from the new API
+new_api_data = fetch_new_api_data()
+
+if new_api_data:
+    processed_new_api_data = process_new_api_data(new_api_data)
+    visualize_new_api_data(processed_new_api_data)
+else:
+    st.write("Failed to fetch data from the Premier League API.")
 
 if st.button("Fetch Data"):
     data = fetch_data(league_id)
@@ -40,3 +49,4 @@ if st.button("Fetch Data"):
         st.dataframe(elements_df)
     else:
         st.write("Enter a valid League ID to see the standings.")
+
