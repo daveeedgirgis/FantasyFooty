@@ -9,7 +9,10 @@ logging.basicConfig(level=logging.DEBUG)
 # Load custom CSS to hide Streamlit branding
 def local_css(file_name):
     with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+        css = f.read()
+        st.markdown(f'<style>{css}</style>', unsafe_allow_html=True)
+        st.write(f"Loaded CSS: {css[:100]}...")  # Display the first 100 characters of the CSS to verify loading
+
 
 local_css("static/styles.css")
 
